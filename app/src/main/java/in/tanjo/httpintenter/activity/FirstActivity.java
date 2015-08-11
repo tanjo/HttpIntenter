@@ -18,6 +18,8 @@ import in.tanjo.httpintenter.model.UrlModelManager;
 
 public class FirstActivity extends Activity {
 
+  public static final int MENU_DELETE_LOG = 100;
+
   @Bind(R.id.first_activity_listview) ListView mListView;
 
   private UrlModelManager mUrlModelManager;
@@ -46,11 +48,20 @@ public class FirstActivity extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    return super.onCreateOptionsMenu(menu);
+    menu.add(0, MENU_DELETE_LOG, 0, "Delete All");
+    return true;
   }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    return super.onOptionsItemSelected(item);
+    switch (item.getItemId()) {
+      case MENU_DELETE_LOG:
+        mUrlModelManager.delete();
+        UrlContentAdapter adapter = (UrlContentAdapter)mListView.getAdapter();
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+        return true;
+    }
+    return false;
   }
 }
