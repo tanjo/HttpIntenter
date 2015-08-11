@@ -25,6 +25,12 @@ public class UrlModelManager {
     mUrlModels = UrlModels.fromJson(json);
   }
 
+  public void delete() {
+    SharedPreferences sp = mContext.getSharedPreferences(SAVE_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+    sp.edit().clear().apply();
+  }
+
+
   @Override
   public String toString() {
     return mUrlModels.toJson();

@@ -21,13 +21,23 @@ public class StringUtils {
   }
 
   public static String getHttp(String text) {
+    if (text == null) {
+      return null;
+    }
     Matcher matcher = getUrlPattern().matcher(text);
     if (matcher.find()) {
       String url = matcher.group();
-      if (url != null && url != "") {
+      if (url != null && !url.equals("")) {
         return matcher.group();
       }
     }
     return null;
+  }
+
+  public static String convertNullToEmptyString(String string) {
+    if (string == null) {
+      return null;
+    }
+    return string;
   }
 }

@@ -31,7 +31,7 @@ public enum BrowserType {
   }
 
   public Intent nextIntent(String url) {
-    if (url == null || url == "") {
+    if (url == null || url.equals("")) {
       return null;
     }
     Uri uri = Uri.parse(url);
