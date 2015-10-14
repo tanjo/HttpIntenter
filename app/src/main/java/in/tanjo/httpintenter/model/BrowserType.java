@@ -39,11 +39,10 @@ public enum BrowserType {
   }
 
   public Intent nextIntent(Uri uri) {
-    if (equals(None)) {
-      return null;
-    }
     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    intent.setPackage(getPackageName());
+    if (!equals(None)) {
+      intent.setPackage(getPackageName());
+    }
     return intent;
   }
 

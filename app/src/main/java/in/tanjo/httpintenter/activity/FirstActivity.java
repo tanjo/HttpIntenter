@@ -1,13 +1,13 @@
 package in.tanjo.httpintenter.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +42,16 @@ public class FirstActivity extends Activity {
         if (urlModel.open(FirstActivity.this)) {
           finish();
         }
+      }
+    });
+    mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+      @Override
+      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(FirstActivity.this, ListLuncherActivity.class);
+        UrlModel urlModel = mUrlModelManager.getUrlModels().getItems().get(position);
+        intent.putExtra(ListLuncherActivity.EXTRA_URL, urlModel.getUrl());
+        startActivity(intent);
+        return true;
       }
     });
   }

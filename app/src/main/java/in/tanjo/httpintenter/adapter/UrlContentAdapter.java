@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,7 +22,7 @@ public class UrlContentAdapter extends ArrayAdapter<UrlModel> {
   public static class ViewHolder {
     @Bind(R.id.url_content_cell_title) TextView mTitleView;
     @Bind(R.id.url_content_cell_url) TextView mUrlView;
-    @Bind(R.id.url_content_cell_json) TextView mJsonView;
+    @Bind(R.id.url_content_cell_flag) TextView mJsonView;
 
     public ViewHolder(View v) {
       ButterKnife.bind(this, v);
@@ -64,9 +62,14 @@ public class UrlContentAdapter extends ArrayAdapter<UrlModel> {
 
     UrlModel urlModel = getItem(position);
     if (urlModel != null && holder.getTitleView() != null) {
-      holder.getTitleView().setText(urlModel.getTitle());
+      holder.getTitleView().setText(urlModel.getSubject());
+      if (urlModel.getSubject() == null || urlModel.getSubject().length() == 0) {
+        holder.getTitleView().setVisibility(View.GONE);
+      } else {
+        holder.getTitleView().setVisibility(View.VISIBLE);
+      }
       holder.getUrlView().setText(urlModel.getUrl());
-      holder.getJsonView().setText(urlModel.toJson());
+      holder.getJsonView().setText(String.valueOf(urlModel.getFlags()));
     }
 
     return convertView;
