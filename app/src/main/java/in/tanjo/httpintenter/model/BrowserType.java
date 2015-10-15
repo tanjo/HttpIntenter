@@ -15,7 +15,7 @@ public enum BrowserType {
   private String mPackageName;
   private int mFlags;
 
-  private BrowserType(String className, String packageName, int flags) {
+  BrowserType(String className, String packageName, int flags) {
     mClassName = className;
     mPackageName = packageName;
     mFlags = flags;
