@@ -1,7 +1,10 @@
 package in.tanjo.httpintenter.model;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
+import in.tanjo.httpintenter.activity.ListLuncherActivity;
 
 public enum BrowserType {
   DefaultBrowser("com.android.browser.BrowserActivity", "com.android.browser", 50855937),
@@ -30,20 +33,24 @@ public enum BrowserType {
     return mFlags;
   }
 
-  public Intent nextIntent(String url) {
+  public Intent nextIntent(String url, Context context) {
     if (url == null || url.equals("")) {
       return null;
     }
     Uri uri = Uri.parse(url);
-    return nextIntent(uri);
+    return nextIntent(uri, context);
   }
 
-  public Intent nextIntent(Uri uri) {
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+  public Intent nextIntent(Uri uri, Context context) {
     if (!equals(None)) {
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
       intent.setPackage(getPackageName());
+      return intent;
+    } else {
+      Intent intent = new Intent(context, ListLuncherActivity.class);
+      intent.putExtra(ListLuncherActivity.EXTRA_URL, uri.toString());
+      return intent;
     }
-    return intent;
   }
 
   public static BrowserType fromFlags(int flags) {

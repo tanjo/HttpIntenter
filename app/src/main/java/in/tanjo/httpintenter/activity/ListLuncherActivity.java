@@ -17,9 +17,7 @@ public class ListLuncherActivity extends ListActivity {
 
   public static final String EXTRA_URL = "list_launcher_activity_extra_url";
 
-  private String mUrl;
   private Uri mUri;
-  private ArrayList<String> mAppList;
   private List<ResolveInfo> mAppInfo;
 
   @Override
@@ -28,21 +26,21 @@ public class ListLuncherActivity extends ListActivity {
 
     Intent receivedIntent = getIntent();
     if (receivedIntent != null) {
-      mUrl = receivedIntent.getStringExtra(EXTRA_URL);
-      mUri = Uri.parse(mUrl);
+      String url = receivedIntent.getStringExtra(EXTRA_URL);
+      mUri = Uri.parse(url);
     }
 
-    mAppList = new ArrayList<String>();
+    ArrayList<String> appList = new ArrayList<String>();
     PackageManager packageManager = getPackageManager();
 
     Intent i = new Intent(Intent.ACTION_VIEW, mUri);
     mAppInfo = packageManager.queryIntentActivities(i, 0);
     if (mAppInfo != null) {
       for (ResolveInfo info : mAppInfo) {
-        mAppList.add((String)info.loadLabel(packageManager));
+        appList.add((String) info.loadLabel(packageManager));
       };
     }
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mAppList);
+    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, appList);
     setListAdapter(adapter);
   }
 

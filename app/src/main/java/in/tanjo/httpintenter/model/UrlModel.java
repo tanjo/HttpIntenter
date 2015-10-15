@@ -128,7 +128,7 @@ public class UrlModel {
     if (uri == null) {
       return false;
     }
-    Intent intent = browserType.nextIntent(uri);
+    Intent intent = browserType.nextIntent(uri, activity);
     if (intent == null) {
       return false;
     }
