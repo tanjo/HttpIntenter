@@ -1,24 +1,39 @@
 package in.tanjo.httpintenter.model;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
 import in.tanjo.httpintenter.util.StringUtils;
 
 public class UrlModel {
 
-  @SerializedName("url") String mUrl;
-  @SerializedName("title") String mTitle;
-  @SerializedName("subject") String mSubject;
-  @SerializedName("text") String mText;
-  @SerializedName("installer_package_name") String mInstallerPackageName;
-  @SerializedName("flags") int mFlags;
-  @SerializedName("package") String mPackageName;
-  @SerializedName("class") String mClassName;
+  @SerializedName("url")
+  String mUrl;
+
+  @SerializedName("title")
+  String mTitle;
+
+  @SerializedName("subject")
+  String mSubject;
+
+  @SerializedName("text")
+  String mText;
+
+  @SerializedName("installer_package_name")
+  String mInstallerPackageName;
+
+  @SerializedName("flags")
+  int mFlags;
+
+  @SerializedName("package")
+  String mPackageName;
+
+  @SerializedName("class")
+  String mClassName;
 
   public UrlModel() {
   }

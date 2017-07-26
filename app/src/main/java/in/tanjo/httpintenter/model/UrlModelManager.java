@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class UrlModelManager {
+
   public static String SAVE_SHARED_PREFERENCES = "SAVE_SHARED_PREFERENCES";
+
   public static String SAVE_DATA = "SAVE_DATA";
 
   private Context mContext;
+
   private UrlModels mUrlModels;
 
   public UrlModelManager(Context context) {

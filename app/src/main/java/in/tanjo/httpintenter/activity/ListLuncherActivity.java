@@ -18,6 +18,7 @@ public class ListLuncherActivity extends ListActivity {
   public static final String EXTRA_URL = "list_launcher_activity_extra_url";
 
   private Uri mUri;
+
   private List<ResolveInfo> mAppInfo;
 
   @Override
@@ -38,7 +39,8 @@ public class ListLuncherActivity extends ListActivity {
     if (mAppInfo != null) {
       for (ResolveInfo info : mAppInfo) {
         appList.add((String) info.loadLabel(packageManager));
-      };
+      }
+      ;
     }
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, appList);
     setListAdapter(adapter);

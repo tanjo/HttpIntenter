@@ -6,7 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class UrlModels {
-  @SerializedName("items") List<UrlModel> mItems;
+
+  @SerializedName("items")
+  List<UrlModel> mItems;
 
   public static String toJson(UrlModels urlModels) {
     return new Gson().toJson(urlModels, UrlModels.class);

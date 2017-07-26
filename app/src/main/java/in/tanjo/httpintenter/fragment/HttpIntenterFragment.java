@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import in.tanjo.httpintenter.R;
 
 public class HttpIntenterFragment extends Fragment {
+
   public static HttpIntenterFragment newInstance(String param1, String param2) {
     HttpIntenterFragment fragment = new HttpIntenterFragment();
     Bundle args = new Bundle();
@@ -27,7 +28,7 @@ public class HttpIntenterFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     return inflater.inflate(R.layout.fragment_http_intenter, container, false);
   }

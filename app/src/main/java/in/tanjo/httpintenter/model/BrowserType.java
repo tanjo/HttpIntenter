@@ -12,7 +12,9 @@ public enum BrowserType {
   None(null, null, 0);
 
   private String mClassName;
+
   private String mPackageName;
+
   private int mFlags;
 
   BrowserType(String className, String packageName, int flags) {

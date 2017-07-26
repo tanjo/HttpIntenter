@@ -15,14 +15,21 @@ import in.tanjo.httpintenter.R;
 import in.tanjo.httpintenter.model.UrlModel;
 
 public class UrlContentAdapter extends ArrayAdapter<UrlModel> {
+
   private static final String TAG = UrlContentAdapter.class.getSimpleName();
 
   private LayoutInflater mLayoutInflater;
 
   public static class ViewHolder {
-    @Bind(R.id.url_content_cell_title) TextView mTitleView;
-    @Bind(R.id.url_content_cell_url) TextView mUrlView;
-    @Bind(R.id.url_content_cell_flag) TextView mJsonView;
+
+    @Bind(R.id.url_content_cell_title)
+    TextView mTitleView;
+
+    @Bind(R.id.url_content_cell_url)
+    TextView mUrlView;
+
+    @Bind(R.id.url_content_cell_flag)
+    TextView mJsonView;
 
     public ViewHolder(View v) {
       ButterKnife.bind(this, v);

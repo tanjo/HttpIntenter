@@ -20,7 +20,8 @@ public class FirstActivity extends Activity {
 
   public static final int MENU_DELETE_LOG = 100;
 
-  @Bind(R.id.first_activity_listview) ListView mListView;
+  @Bind(R.id.first_activity_listview)
+  ListView mListView;
 
   private UrlModelManager mUrlModelManager;
 
@@ -67,7 +68,7 @@ public class FirstActivity extends Activity {
     switch (item.getItemId()) {
       case MENU_DELETE_LOG:
         mUrlModelManager.delete();
-        UrlContentAdapter adapter = (UrlContentAdapter)mListView.getAdapter();
+        UrlContentAdapter adapter = (UrlContentAdapter) mListView.getAdapter();
         adapter.clear();
         adapter.notifyDataSetChanged();
         return true;
