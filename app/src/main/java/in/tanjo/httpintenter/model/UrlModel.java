@@ -12,31 +12,28 @@ import in.tanjo.httpintenter.util.StringUtils;
 public class UrlModel {
 
   @SerializedName("url")
-  String mUrl;
+  String url;
 
   @SerializedName("title")
-  String mTitle;
+  String title;
 
   @SerializedName("subject")
-  String mSubject;
+  String subject;
 
   @SerializedName("text")
-  String mText;
+  String text;
 
   @SerializedName("installer_package_name")
-  String mInstallerPackageName;
+  String installerPackageName;
 
   @SerializedName("flags")
-  int mFlags;
+  int flags;
 
   @SerializedName("package")
-  String mPackageName;
+  String packageName;
 
   @SerializedName("class")
-  String mClassName;
-
-  public UrlModel() {
-  }
+  String className;
 
   public UrlModel(Bundle extras, int flags, String packageName, String className) {
     save(extras, flags, packageName, className);
@@ -55,67 +52,67 @@ public class UrlModel {
   }
 
   public String getUrl() {
-    return StringUtils.convertNullToEmptyString(mUrl);
+    return StringUtils.convertNullToEmptyString(url);
   }
 
   public void setUrl(String url) {
-    mUrl = url;
+    this.url = url;
   }
 
   public String getTitle() {
-    return StringUtils.convertNullToEmptyString(mTitle);
+    return StringUtils.convertNullToEmptyString(title);
   }
 
   public void setTitle(String title) {
-    mTitle = title;
+    this.title = title;
   }
 
   public String getSubject() {
-    return StringUtils.convertNullToEmptyString(mSubject);
+    return StringUtils.convertNullToEmptyString(subject);
   }
 
   public void setSubject(String subject) {
-    mSubject = subject;
+    this.subject = subject;
   }
 
   public String getText() {
-    return StringUtils.convertNullToEmptyString(mText);
+    return StringUtils.convertNullToEmptyString(text);
   }
 
   public void setText(String text) {
-    mText = text;
+    this.text = text;
   }
 
   public String getInstallerPackageName() {
-    return StringUtils.convertNullToEmptyString(mInstallerPackageName);
+    return StringUtils.convertNullToEmptyString(installerPackageName);
   }
 
   public void setInstallerPackageName(String installerPackageName) {
-    mInstallerPackageName = installerPackageName;
+    this.installerPackageName = installerPackageName;
   }
 
   public int getFlags() {
-    return mFlags;
+    return flags;
   }
 
   public void setFlags(int flags) {
-    mFlags = flags;
+    this.flags = flags;
   }
 
   public String getPackageName() {
-    return StringUtils.convertNullToEmptyString(mPackageName);
+    return StringUtils.convertNullToEmptyString(packageName);
   }
 
   public void setPackageName(String aPackage) {
-    mPackageName = aPackage;
+    packageName = aPackage;
   }
 
   public String getClassName() {
-    return mClassName;
+    return className;
   }
 
   public void setClassName(String className) {
-    mClassName = className;
+    this.className = className;
   }
 
   public BrowserType getBrowserType() {
