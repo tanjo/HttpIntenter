@@ -6,4 +6,5 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="receiving">受け取り中...</string>
 </resources>
