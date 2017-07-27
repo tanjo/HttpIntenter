@@ -6,7 +6,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import in.tanjo.httpintenter.R;
 import in.tanjo.httpintenter.model.ShareDataModel;
-import io.reactivex.Observable;
 
 import static in.tanjo.httpintenter.util.ViewUtils.setTextObservable;
 
@@ -38,11 +37,11 @@ public class MainViewHolder extends AbsListViewHolder<ShareDataModel> {
   public void bind(ShareDataModel shareDataModel, int position) {
     super.bind(shareDataModel, position);
 
-    setTextObservable(urlView, shareDataModel.url);
-    setTextObservable(titleView, shareDataModel.title);
-    setTextObservable(textView, shareDataModel.text);
+    // setTextObservable(titleView, shareDataModel.title);
     setTextObservable(subjectView, shareDataModel.subject);
-    setTextObservable(jsonView, Observable.just(shareDataModel.toJson()));
-    setTextObservable(flagsView, Observable.just(shareDataModel.flags).map(String::valueOf));
+    setTextObservable(urlView, shareDataModel.url);
+    // setTextObservable(textView, shareDataModel.text);
+    // setTextObservable(flagsView, Observable.just(shareDataModel.flags).map(String::valueOf));
+    // setTextObservable(jsonView, Observable.just(StringUtils.nullToEmpty(shareDataModel.toJson())));
   }
 }

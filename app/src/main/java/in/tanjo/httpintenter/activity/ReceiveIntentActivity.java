@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import in.tanjo.httpintenter.R;
 import in.tanjo.httpintenter.model.ShareDataModel;
 import in.tanjo.httpintenter.model.ShareDataModelManager;
@@ -27,8 +28,10 @@ public class ReceiveIntentActivity extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_receive_intent);
-    shareDataModelSubject.subscribe(this::openLauncher, this::showThrowable);
-    shareDataModelSubject.subscribe(this::saveShareDataModel, this::showThrowable);
+    ButterKnife.bind(this);
+
+    compositeDisposable.add(shareDataModelSubject.subscribe(this::openLauncher, this::showThrowable));
+    compositeDisposable.add(shareDataModelSubject.subscribe(this::saveShareDataModel, this::showThrowable));
 
     shareDataModelSubject.onNext(new ShareDataModel(getIntent(), getCallingActivity()));
   }
@@ -54,6 +57,12 @@ public class ReceiveIntentActivity extends AppCompatActivity {
     ShareDataModelManager.add(shareDataModel);
   }
 
+  @Override
+  protected void onDestroy() {
+    compositeDisposable.clear();
+    super.onDestroy();
+  }
+
   /**
    * {@link LauncherActivity}を開く.
    * 失敗するとメッセージを表示するだけ.
@@ -63,6 +72,6 @@ public class ReceiveIntentActivity extends AppCompatActivity {
       finish();
       return;
     }
-    showMessage("おや？何かがおかしいです");
+    showMessage("おや？何かがおかしいです\n" + shareDataModel.toJson());
   }
 }

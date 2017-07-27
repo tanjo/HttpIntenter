@@ -24,13 +24,16 @@ public class HttpIntenterPreferenceManager extends SharedPreferenceManager {
   }
 
   public List<ShareDataModel> getShareDataModels() {
+    List<ShareDataModel> shareDataModels = null;
     try {
-      // @formatter:off
-      return GsonUtils.getGson().fromJson(getString(KEY_SHARE_DATA_MODELS), new TypeToken<List<ShareDataModel>>() {}.getType());
-      // @formatter:on
-    } catch (Exception e) {
+      shareDataModels = GsonUtils.getGson().fromJson(getString(KEY_SHARE_DATA_MODELS), new TypeToken<List<ShareDataModel>>() {
+      }.getType());
+    } catch (Exception ignored) {
+    }
+    if (shareDataModels == null) {
       return new ArrayList<>();
     }
+    return shareDataModels;
   }
 
   public void clear() {

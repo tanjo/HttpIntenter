@@ -18,7 +18,9 @@ import in.tanjo.httpintenter.adapter.MainAdapter;
 import in.tanjo.httpintenter.event.UpdateShareDataModelEvent;
 import in.tanjo.httpintenter.model.ShareDataModel;
 import in.tanjo.httpintenter.model.ShareDataModelManager;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
   private BehaviorSubject<List<ShareDataModel>> shareDataModels = BehaviorSubject.create();
 
+  private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -38,27 +42,35 @@ public class MainActivity extends AppCompatActivity {
     ButterKnife.bind(this);
 
     mainAdapter = new MainAdapter(this);
+    listView.setAdapter(mainAdapter);
 
-    shareDataModels.subscribe(mainAdapter::set, Throwable::printStackTrace);
+    compositeDisposable.add(shareDataModels.subscribe(mainAdapter::set, Throwable::printStackTrace));
 
-    ShareDataModelManager.toObservable()
+    compositeDisposable.add(ShareDataModelManager
+        .toObservable()
         .observeOn(AndroidSchedulers.mainThread())
         .filter(object -> object instanceof UpdateShareDataModelEvent)
         .map(event -> (UpdateShareDataModelEvent) event)
-        .subscribe(updateShareDataModelEvent -> shareDataModels.onNext(ShareDataModelManager.get()));
+        .subscribe(updateShareDataModelEvent -> shareDataModels.onNext(ShareDataModelManager.get())));
 
-    RxAdapterView.itemClicks(listView)
-        .zipWith(shareDataModels, (i, list) -> list.get(i))
-        .filter(shareDataModel -> shareDataModel.openLuncherActivity(this))
-        .subscribe(shareDataModel -> finish(), Throwable::printStackTrace);
+    compositeDisposable.add(Observable
+        .combineLatest(shareDataModels, RxAdapterView.itemClicks(listView), List::get)
+        .subscribe(shareDataModel -> shareDataModel.openLuncherActivity(this), Throwable::printStackTrace));
 
     shareDataModels.onNext(ShareDataModelManager.get());
   }
 
   @Override
+  protected void onDestroy() {
+    compositeDisposable.clear();
+    super.onDestroy();
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    RxMenuItem.clicks(menu.add(0, 100, 0, "Delete All"))
-        .subscribe(o -> ShareDataModelManager.clear(), Throwable::printStackTrace);
+    compositeDisposable.add(RxMenuItem
+        .clicks(menu.add(0, 100, 0, "Delete All"))
+        .subscribe(o -> ShareDataModelManager.clear(), Throwable::printStackTrace));
     return true;
   }
 }

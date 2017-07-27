@@ -4,12 +4,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="8dp"
         >
 
     <TextView
             android:id="@+id/viewholder_main_titleview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:visibility="gone"
             tools:text="Title"
             />
 
@@ -17,6 +20,8 @@
             android:id="@+id/viewholder_main_subjectview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:visibility="gone"
             tools:text="Subject"
             />
 
@@ -24,6 +29,8 @@
             android:id="@+id/viewholder_main_urlview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#888888"
+            android:visibility="gone"
             tools:text="Url"
             />
 
@@ -31,6 +38,8 @@
             android:id="@+id/viewholder_main_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#888888"
+            android:visibility="gone"
             tools:text="Text"
             />
 
@@ -38,6 +47,7 @@
             android:id="@+id/viewholder_main_flagsview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="Flags"
             />
 
@@ -45,6 +55,7 @@
             android:id="@+id/viewholder_main_jsonview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="Json"
             />
 

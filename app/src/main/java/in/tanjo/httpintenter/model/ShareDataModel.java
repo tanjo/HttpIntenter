@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import in.tanjo.httpintenter.activity.LauncherActivity;
 import in.tanjo.httpintenter.util.GsonUtils;
@@ -36,7 +37,7 @@ public class ShareDataModel {
       setupIntent(intent);
     }
     if (callingActivity != null) {
-      initCallingActivity(callingActivity);
+      setupCallingActivity(callingActivity);
     }
   }
 
@@ -49,7 +50,7 @@ public class ShareDataModel {
     setupExtra(extra);
   }
 
-  private void initCallingActivity(@NonNull ComponentName componentName) {
+  private void setupCallingActivity(@NonNull ComponentName componentName) {
     packageName = componentName.getPackageName();
     className = componentName.getClassName();
   }
@@ -83,14 +84,14 @@ public class ShareDataModel {
    * ListLauncherActivity で URLを開く
    */
   public boolean openLuncherActivity(@NonNull Context context) {
-    return open(context, LauncherActivity.class, url);
+    return open(context, LauncherActivity.class);
   }
 
-  private static <T extends Class> boolean open(@NonNull Context context, @NonNull T tClass, @NonNull String url) {
+  private <T extends Class> boolean open(@NonNull Context context, @NonNull T tClass) {
     if (StringUtils.isNullOrEmpty(url)) {
       return false;
     }
-    Intent intent = createIntent(context, tClass, url);
+    Intent intent = createIntent(context, tClass);
     if (intent == null) {
       return false;
     }
@@ -98,9 +99,9 @@ public class ShareDataModel {
     return true;
   }
 
-  private static <T extends Class> Intent createIntent(@NonNull Context context, @NonNull T tClass, @NonNull String url) {
+  private <T extends Class> Intent createIntent(@NonNull Context context, @NonNull T tClass) {
     Intent intent = new Intent(context, tClass);
-    intent.putExtra(EXTRA_SHARE_DATA_MODEL, url);
+    intent.putExtra(EXTRA_SHARE_DATA_MODEL, toJson());
     return intent;
   }
 

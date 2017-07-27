@@ -20,6 +20,7 @@ import in.tanjo.httpintenter.adapter.LauncherAdapter;
 import in.tanjo.httpintenter.model.ShareDataModel;
 import in.tanjo.httpintenter.util.GsonUtils;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class LauncherActivity extends AppCompatActivity {
@@ -33,6 +34,8 @@ public class LauncherActivity extends AppCompatActivity {
 
   private LauncherAdapter launcherAdapter;
 
+  private CompositeDisposable compositeDisposable = new CompositeDisposable();
+
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -40,28 +43,36 @@ public class LauncherActivity extends AppCompatActivity {
     ButterKnife.bind(this);
 
     launcherAdapter = new LauncherAdapter(this);
+    listView.setAdapter(launcherAdapter);
 
-    RxAdapterView.itemClicks(listView)
-        .zipWith(appList, (i, resolveInfos) -> resolveInfos.get(i))
-        .zipWith(shareDataModel.map(model -> model.url).map(Uri::parse), this::createIntentWithPackage)
-        .subscribe(this::startActivity, Throwable::printStackTrace, this::finish);
+    compositeDisposable
+        .add(Observable.combineLatest(Observable.combineLatest(appList, RxAdapterView.itemClicks(listView), List::get),
+            shareDataModel.map(model -> model.url).map(Uri::parse),
+            this::createIntentWithPackage)
+            .subscribe(this::startActivity, Throwable::printStackTrace, this::finish));
 
-    appList
-        .flatMapIterable(resolveInfos -> resolveInfos)
-        .zipWith(Observable.just(getPackageManager()), (info, packageManager) -> info.loadLabel(packageManager).toString())
+    compositeDisposable.add(Observable
+        .combineLatest(appList.flatMapIterable(resolveInfos -> resolveInfos), Observable.just(getPackageManager()),
+            (info, packageManager) -> info.loadLabel(packageManager).toString())
         .toList()
-        .subscribe(launcherAdapter::set, throwable -> launcherAdapter.set(Collections.emptyList()));
+        .subscribe(launcherAdapter::set, throwable -> launcherAdapter.set(Collections.emptyList())));
 
-    shareDataModel.map(model -> model.url)
-        .map(Uri::parse)
-        .map(uri -> new Intent(Intent.ACTION_VIEW, uri))
-        .zipWith(Observable.just(getPackageManager()), (i, pm) -> pm.queryIntentActivities(i, 0))
-        .subscribe(appList::onNext, appList::onError);
+    compositeDisposable.add(Observable
+        .combineLatest(shareDataModel.map(m -> m.url).map(Uri::parse).map(uri -> new Intent(Intent.ACTION_VIEW, uri)),
+            Observable.just(getPackageManager()), (i, pm) -> pm.queryIntentActivities(i, 0))
+        .subscribe(appList::onNext, appList::onError));
 
-    Observable.just(getIntent())
+    compositeDisposable.add(Observable
+        .just(getIntent())
         .map(intent -> intent.getStringExtra(ShareDataModel.EXTRA_SHARE_DATA_MODEL))
         .map(s -> GsonUtils.getGson().fromJson(s, ShareDataModel.class))
-        .subscribe(shareDataModel::onNext, shareDataModel::onError);
+        .subscribe(shareDataModel::onNext, shareDataModel::onError));
+  }
+
+  @Override
+  protected void onDestroy() {
+    compositeDisposable.clear();
+    super.onDestroy();
   }
 
   /**
