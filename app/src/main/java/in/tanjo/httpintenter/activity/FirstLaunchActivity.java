@@ -60,8 +60,7 @@ public class FirstLaunchActivity extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    RxMenuItem.clicks(menu.add(0, MENU_DELETE_LOG, 0, "Delete All"))
-        .subscribe(o -> urlModels.onNext(Collections.emptyList()));
+    RxMenuItem.clicks(menu.add(0, MENU_DELETE_LOG, 0, "Delete All")).subscribe(o -> urlModels.onNext(Collections.emptyList()));
     return true;
   }
 
