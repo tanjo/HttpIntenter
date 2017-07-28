@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     compositeDisposable.add(RxMenuItem
         .clicks(menu.add(0, 100, 0, "Delete All"))
         .subscribe(o -> ShareDataModelManager.clear(), Throwable::printStackTrace));
+    compositeDisposable.add(RxMenuItem
+        .clicks(menu.add(0, 101, 1, "License"))
+        .subscribe(o -> startActivity(LicenseActivity.createIntent(this))));
     return true;
   }
 }

@@ -29,6 +29,8 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
+        pickFirst 'META-INF/CONTRIBUTORS.md'
+        pickFirst 'META-INF/LICENSE.md'
     }
 }
 

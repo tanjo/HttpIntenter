@@ -5,17 +5,17 @@ public class Library {
   /**
    * ライブラリ名
    */
-  String name;
+  public String name;
 
   /**
    * ライブラリの説明
    */
-  String description;
+  public String description;
 
   /**
    * ライブラリへのリンク
    */
-  String url;
+  public String url;
 
   public Library() {
 

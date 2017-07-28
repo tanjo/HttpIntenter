@@ -29,6 +29,8 @@
 
         <activity android:name=".activity.LauncherActivity" />
 
+        <activity android:name=".activity.LicenseActivity" />
+
     </application>
 
 </manifest>
