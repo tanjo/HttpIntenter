@@ -3,6 +3,7 @@ package in.tanjo.httpintenter.activity;
 import com.jakewharton.rxbinding2.widget.RxAdapterView;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,37 +37,53 @@ public class LauncherActivity extends AppCompatActivity {
 
   private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+  private BehaviorSubject<PackageManager> packageManager = BehaviorSubject.create();
+
+  private BehaviorSubject<Intent> intent = BehaviorSubject.create();
+
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_launcher);
     ButterKnife.bind(this);
-
     launcherAdapter = new LauncherAdapter(this);
     listView.setAdapter(launcherAdapter);
+    subscribe();
+    packageManager.onNext(getPackageManager());
+    intent.onNext(getIntent());
+  }
 
-    compositeDisposable
-        .add(Observable.combineLatest(Observable.combineLatest(appList, RxAdapterView.itemClicks(listView), List::get),
+  /**
+   * RxJava-related subscribe
+   */
+  private void subscribe() {
+    // Item Click 時に遷移する
+    compositeDisposable.add(Observable
+        .combineLatest(Observable.combineLatest(appList, RxAdapterView.itemClicks(listView), List::get),
             shareDataModel.map(model -> model.url).map(Uri::parse),
             this::createIntentWithPackage)
-            .subscribe(this::startActivity, Throwable::printStackTrace, this::finish));
+        .subscribe(this::startActivity, Throwable::printStackTrace, this::finish)
+    );
 
+    // AppList (String) のリスト作成
     compositeDisposable.add(Observable
-        .combineLatest(appList.flatMapIterable(resolveInfos -> resolveInfos), Observable.just(getPackageManager()),
-            (info, packageManager) -> info.loadLabel(packageManager).toString())
-        .toList()
-        .subscribe(launcherAdapter::set, throwable -> launcherAdapter.set(Collections.emptyList())));
+        .combineLatest(appList, packageManager, this::createAppListStrings)
+        .subscribe(launcherAdapter::set, throwable -> launcherAdapter.set(Collections.emptyList()))
+    );
 
+    // ShareDataModel から AppList を作成
     compositeDisposable.add(Observable
-        .combineLatest(shareDataModel.map(m -> m.url).map(Uri::parse).map(uri -> new Intent(Intent.ACTION_VIEW, uri)),
-            Observable.just(getPackageManager()), (i, pm) -> pm.queryIntentActivities(i, 0))
-        .subscribe(appList::onNext, appList::onError));
+        .combineLatest(shareDataModel.map(m -> m.url).map(Uri::parse).map(this::createIntentWithUri),
+            packageManager, (i, pm) -> pm.queryIntentActivities(i, 0))
+        .subscribe(appList::onNext, appList::onError)
+    );
 
-    compositeDisposable.add(Observable
-        .just(getIntent())
-        .map(intent -> intent.getStringExtra(ShareDataModel.EXTRA_SHARE_DATA_MODEL))
+    // Intent から ShareDataModel を取得
+    compositeDisposable.add(intent
+        .map(i -> i.getStringExtra(ShareDataModel.EXTRA_SHARE_DATA_MODEL))
         .map(s -> GsonUtils.getGson().fromJson(s, ShareDataModel.class))
-        .subscribe(shareDataModel::onNext, shareDataModel::onError));
+        .subscribe(shareDataModel::onNext, shareDataModel::onError)
+    );
   }
 
   @Override
@@ -82,5 +99,22 @@ public class LauncherActivity extends AppCompatActivity {
     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
     intent.setPackage(info.activityInfo.packageName);
     return intent;
+  }
+
+  /**
+   * Intent#ACTION_VIEW に URI を設定した {@link Intent} を返す
+   */
+  private Intent createIntentWithUri(Uri uri) {
+    return new Intent(Intent.ACTION_VIEW, uri);
+  }
+
+  /**
+   * {@link ResolveInfo} と {@link PackageManager} から AppList を作成する
+   */
+  private List<String> createAppListStrings(List<ResolveInfo> resolveInfos, PackageManager packageManager) {
+    return Observable.fromIterable(resolveInfos)
+        .map(info -> info.loadLabel(packageManager).toString())
+        .toList()
+        .blockingGet();
   }
 }

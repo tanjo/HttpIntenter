@@ -2,6 +2,7 @@ package in.tanjo.httpintenter.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.List;
