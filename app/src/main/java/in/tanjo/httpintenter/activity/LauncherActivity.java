@@ -78,12 +78,31 @@ public class LauncherActivity extends AppCompatActivity {
         .subscribe(appList::onNext, appList::onError)
     );
 
+// URL を検索とかもできそう(形態素解析しないと)
+//    compositeDisposable.add(Observable
+//        .combineLatest(
+//            Observable.combineLatest(
+//                Observable.just(createIntentWithWebSearch()),
+//                packageManager,
+//                (i, pm) -> pm.queryIntentActivities(i, 0)),
+//            packageManager,
+//            this::createAppListStrings)
+//        .subscribe(launcherAdapter::addAll, throwable -> launcherAdapter.set(Collections.emptyList()))
+//    );
+
     // Intent から ShareDataModel を取得
     compositeDisposable.add(intent
         .map(i -> i.getStringExtra(ShareDataModel.EXTRA_SHARE_DATA_MODEL))
         .map(s -> GsonUtils.getGson().fromJson(s, ShareDataModel.class))
         .subscribe(shareDataModel::onNext, shareDataModel::onError)
     );
+  }
+
+  /**
+   * Intent#ACTION_WEB_SEARCH
+   */
+  private Intent createIntentWithWebSearch() {
+    return new Intent(Intent.ACTION_WEB_SEARCH);
   }
 
   @Override
