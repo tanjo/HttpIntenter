@@ -1,6 +1,5 @@
 package in.tanjo.httpintenter.activity;
 
-import com.atilika.kuromoji.ipadic.Token;
 import com.atilika.kuromoji.ipadic.Tokenizer;
 
 import android.app.SearchManager;
@@ -31,7 +30,6 @@ import in.tanjo.httpintenter.util.StringUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.internal.schedulers.NewThreadScheduler;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
@@ -92,7 +90,6 @@ public class SearchActivity extends AppCompatActivity {
     compositeDisposable.add(shareDataModel
         .subscribeOn(new NewThreadScheduler())
         .map(this::createTokens)
-        .flatMap(t -> Observable.just(new HashSet<>(Observable.fromIterable(t).map(SmallToken::new).toList().blockingGet())))
         .subscribe(tokens::onNext, tokens::onError)
     );
 
@@ -116,22 +113,31 @@ public class SearchActivity extends AppCompatActivity {
     itemClicks.onNext(position);
   }
 
-  private Set<Token> createTokens(ShareDataModel shareDataModel) {
-    Set<Token> keywords = new HashSet<>();
+  private Set<SmallToken> createTokens(ShareDataModel shareDataModel) {
+    List<SmallToken> keywords = new ArrayList<>();
     Tokenizer tokenizer = new Tokenizer();
     List<String> strings = Arrays.asList(
         StringUtils.nullToEmpty(shareDataModel.title),
         StringUtils.nullToEmpty(shareDataModel.text),
-        StringUtils.nullToEmpty(shareDataModel.subject),
-        StringUtils.nullToEmpty(shareDataModel.url)
+        StringUtils.nullToEmpty(shareDataModel.subject)
     );
     for (String s : strings) {
       if (StringUtils.isNullOrEmpty(s)) {
         continue;
       }
-      keywords.addAll(tokenizer.tokenize(shareDataModel.url));
+      keywords.addAll(Observable
+          .fromIterable(tokenizer.tokenize(s))
+          .map(SmallToken::new)
+          .toList()
+          .blockingGet());
     }
-    return keywords;
+    keywords.add(new SmallToken(StringUtils.nullToEmpty(shareDataModel.url), "URL"));
+
+    return new HashSet<>(Observable.fromIterable(keywords)
+        .filter(smallToken -> !StringUtils.isNullOrEmpty(smallToken.surface))
+        .filter(smallToken -> !smallToken.surface.equals(" "))
+        .toList()
+        .blockingGet());
   }
 
   private Intent createIntent(SmallToken token) {

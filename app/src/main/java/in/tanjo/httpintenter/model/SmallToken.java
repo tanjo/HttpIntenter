@@ -2,6 +2,8 @@ package in.tanjo.httpintenter.model;
 
 import com.atilika.kuromoji.ipadic.Token;
 
+import in.tanjo.httpintenter.util.StringUtils;
+
 public class SmallToken {
 
   public String surface;
@@ -12,11 +14,17 @@ public class SmallToken {
     if (token == null) {
       return;
     }
-    surface = token.getSurface();
+    surface = StringUtils.nullToEmpty(token.getSurface());
     if (token.getAllFeaturesArray().length == 0) {
+      type = "";
       return;
     }
-    type = token.getAllFeaturesArray()[0];
+    type = StringUtils.nullToEmpty(token.getAllFeaturesArray()[0]);
+  }
+
+  public SmallToken(String surface, String type) {
+    this.surface = surface;
+    this.type = type;
   }
 
   @Override
@@ -39,5 +47,20 @@ public class SmallToken {
 
     return surface != null ? surface.equals(that.surface)
         : that.surface == null && (type != null ? type.equals(that.type) : that.type == null);
+  }
+
+  /**
+   * 長い文字列が一番上にくる
+   */
+  public int compareTo(SmallToken s2) {
+    if (s2 == null) {
+      return 1;
+    }
+    if (surface.length() > s2.surface.length()) {
+      return -1;
+    } else if (surface.length() == s2.surface.length()) {
+      return 0;
+    }
+    return 1;
   }
 }

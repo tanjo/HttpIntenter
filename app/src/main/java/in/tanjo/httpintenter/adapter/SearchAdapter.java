@@ -27,7 +27,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> {
   private Listener listener;
 
   public void setTokens(@NonNull List<SmallToken> tokens) {
-    this.tokens = tokens;
+    this.tokens = Observable.fromIterable(tokens).toSortedList(SmallToken::compareTo).blockingGet();
     notifyDataSetChanged();
   }
 
