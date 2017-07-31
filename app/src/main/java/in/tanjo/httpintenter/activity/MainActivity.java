@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         .combineLatest(shareDataModels, RxAdapterView.itemClicks(listView), List::get)
         .subscribe(shareDataModel -> shareDataModel.openLuncherActivity(this), Throwable::printStackTrace));
 
+    compositeDisposable.add(Observable
+        .combineLatest(shareDataModels, RxAdapterView.itemLongClicks(listView), List::get)
+        .subscribe(shareDataModel -> shareDataModel.openDetailActivity(this), Throwable::printStackTrace));
+
     shareDataModels.onNext(ShareDataModelManager.get());
   }
 

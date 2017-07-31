@@ -15,7 +15,7 @@ import in.tanjo.httpintenter.adapter.holder.LicenseViewHolder;
 import in.tanjo.httpintenter.model.license.License;
 
 
-public class LicenseRecyclerViewAdapter extends RecyclerView.Adapter<LicenseViewHolder> {
+public class LicenseAdapter extends RecyclerView.Adapter<LicenseViewHolder> {
 
   @NonNull
   private List<License> licenses = new ArrayList<>();
@@ -63,7 +63,7 @@ public class LicenseRecyclerViewAdapter extends RecyclerView.Adapter<LicenseView
   }
 
   private void onLicenseClick(int position) {
-    if (listener == null && 0 <= position && position < licenses.size()) {
+    if (listener == null || position < 0 || licenses.size() <= position) {
       return;
     }
     listener.onItemClick(position, licenses.get(position));

@@ -59,9 +59,10 @@ public class LicenseViewHolder extends AbsRecyclerViewHolder<License> {
 
   @OnClick(R.id.viewholder_license_linearlayout)
   void onClick() {
-    if (getListener() == null) {
+    Listener listener = getListener();
+    if (listener == null) {
       return;
     }
-    getListener().onItemClick(position);
+    listener.onItemClick(position);
   }
 }

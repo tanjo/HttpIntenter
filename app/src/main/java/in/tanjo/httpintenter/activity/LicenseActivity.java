@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -19,7 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.tanjo.httpintenter.R;
-import in.tanjo.httpintenter.adapter.LicenseRecyclerViewAdapter;
+import in.tanjo.httpintenter.adapter.LicenseAdapter;
 import in.tanjo.httpintenter.model.license.License;
 import in.tanjo.httpintenter.model.license.Licenses;
 import in.tanjo.httpintenter.util.StringUtils;
@@ -47,7 +46,7 @@ public class LicenseActivity extends AppCompatActivity {
 
   CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-  LicenseRecyclerViewAdapter adapter = new LicenseRecyclerViewAdapter();
+  LicenseAdapter adapter = new LicenseAdapter();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {

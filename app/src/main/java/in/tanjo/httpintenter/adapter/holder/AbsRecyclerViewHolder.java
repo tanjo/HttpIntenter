@@ -19,6 +19,7 @@ public abstract class AbsRecyclerViewHolder<Item> extends RecyclerView.ViewHolde
     super(itemView);
     ButterKnife.bind(this, itemView);
     this.listener = listener;
+    this.view = itemView;
   }
 
   @Nullable

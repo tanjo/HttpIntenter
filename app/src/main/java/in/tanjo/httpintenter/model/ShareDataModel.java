@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
+import in.tanjo.httpintenter.activity.SearchActivity;
 import in.tanjo.httpintenter.activity.LauncherActivity;
 import in.tanjo.httpintenter.util.GsonUtils;
 import in.tanjo.httpintenter.util.StringUtils;
 
 public class ShareDataModel {
 
-  public static final String EXTRA_SHARE_DATA_MODEL = "share_data_model_extra_url";
+  public static final String EXTRA_SHARE_DATA_MODEL = "share_data_model_extra";
 
   public String url;
 
@@ -85,6 +85,13 @@ public class ShareDataModel {
    */
   public boolean openLuncherActivity(@NonNull Context context) {
     return open(context, LauncherActivity.class);
+  }
+
+  /**
+   * SearchActivity で URL を開く
+   */
+  public boolean openDetailActivity(@NonNull Context context) {
+    return open(context, SearchActivity.class);
   }
 
   private <T extends Class> boolean open(@NonNull Context context, @NonNull T tClass) {
