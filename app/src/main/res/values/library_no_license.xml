@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_license_name">No License</string>
+    <string name="no_license_url">https://choosealicense.com/no-license/</string>
+    <string name="no_license_text" />
+</resources>

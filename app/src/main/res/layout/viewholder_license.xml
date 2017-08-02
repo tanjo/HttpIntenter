@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/viewholder_license_linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        >
+
+    <TextView
+            android:id="@+id/viewholder_license_library_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            tools:text="library name"
+            />
+
+    <TextView
+            android:id="@+id/viewholder_license_copyright"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    <TextView
+            android:id="@+id/viewholder_license_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="type"
+            />
+
+    <TextView
+            android:id="@+id/viewholder_license_library_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#9E9E9E"
+            tools:text="library url"
+            />
+
+    <TextView
+            android:id="@+id/viewholder_license_library_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#B0BEC5"
+            tools:text="library description"
+            />
+
+</LinearLayout>
