@@ -34,7 +34,7 @@ public class Licenses {
 
   public static final License rxBinding = new License.Builder()
       .libraryName("RxBinding")
-      .libraryDescription("RxJava binding APIs for Android's UI widgets.\n")
+      .libraryDescription("RxJava binding APIs for Android's UI widgets.")
       .libraryUrl("https://github.com/JakeWharton/RxBinding")
       .ownerName("Jake Wharton")
       .type(APACHE_2_0)
